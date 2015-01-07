@@ -3,19 +3,34 @@
 require 'net/fping'
 require 'socket'
 
+unless ARGV.length == 1
+  puts "\nNot enough or too many arguments.\n\n"
+  puts "Usage:"
+  puts "       As daemon: ruby graphite-smokeping_d.rb start -- graphite_server"
+  puts "       As proc: ruby graphite-smokeping.rb graphite_server\n\n"
+  exit
+end
+
 gr_source = Socket::gethostname.gsub(".", "-")
-gr_server = '192.168.56.203'
+gr_server = ARGV[0]
 gr_path = gr_source + ".network.ping.latency"
 
-#latency_s = Net::Fping::latency_simple("4.2.2.2")
-latency = Net::Fping::latency("4.2.2.2", "68", "6", "1000")
-metric = ["loss", "min", "avg", "max"]
+loop do
+  File.open("smokeping_hosts", "r") do |hosts_f|
+    hosts_f.each_line do |dst|
+      latency = Net::Fping::latency("#{dst}", "68", "6", "1000")
+      metric = ["loss", "min", "avg", "max"]
 
-latency.zip metric
-latency.zip(metric).each do |value, metric|
-  time = Time.new
-  epoch = time.to_i
-  sock = TCPSocket.open("#{gr_server}", 2003)
-  sock.write("#{gr_path}.#{metric} #{value} #{epoch}\n")
-  sock.close
+      latency.zip metric
+      latency.zip(metric).each do |value, metric|
+        dst_path = dst.gsub(".", "-")
+        time = Time.new
+        epoch = time.to_i
+        sock = TCPSocket.open("#{gr_server}", 2003)
+        sock.write("#{gr_path}.#{dst_path}#{metric} #{value} #{epoch}\n")
+        sock.close
+      end
+    end
+  end
+  sleep(17)
 end
