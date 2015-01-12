@@ -19,7 +19,7 @@ Examples:
 
 $ graphite-smokeping_svc start -- 192.168.56.203 # Start service
 
-$ ruby gte-smokeping_svc status # Check service status
+$ graphite-smokeping_svc status # Check service status
 graphite-smokeping: running [pid 4409]
 
 $ graphite-smokeping_svc stop # Stop service
