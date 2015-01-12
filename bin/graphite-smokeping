@@ -6,8 +6,8 @@ require 'socket'
 unless ARGV.length == 1
   puts "\nNot enough or too many arguments.\n\n"
   puts "Usage:"
-  puts "       As daemon: ruby graphite-smokeping_d.rb start -- graphite_server"
-  puts "       As proc: ruby graphite-smokeping.rb graphite_server\n\n"
+  puts "       As daemon: ruby graphite-smokeping_svc start -- GRAPHITE_SERVER_IP"
+  puts "       As proc: ruby graphite-smokeping GRAPHITE_SERVER_IP\n\n"
   exit
 end
 

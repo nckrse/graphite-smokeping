@@ -1,20 +1,20 @@
 #!/usr/bin/env ruby
-# daemon control for graphite-smokeping.rb
+# daemon control for graphite-smokeping
 
 require 'daemons'
 
 unless ARGV.length == 3 || ARGV[0] == "stop" || ARGV[0] == "status"
   puts "\nNot enough or too many arguments.\n\n"
   puts "Usage:"
-  puts "       As daemon: ruby graphite-smokeping_d.rb start -- graphite_server"
-  puts "       As proc: ruby graphite-smokeping.rb graphite_server\n\n"
+  puts "       As daemon: ruby graphite-smokeping_svc start -- GRAPHITE_SERVER_IP"
+  puts "       As proc: graphite-smokeping GRAPHITE_SERVER_IP\n\n"
   exit
 end
 
 if ARGV.length == 3
   arg = ARGV[2]
   cwd = Dir.pwd
-  script = cwd + '/graphite-smokeping.rb ' + arg
+  script = cwd + '/graphite-smokeping ' + arg
 end
 
 Daemons.run_proc(
