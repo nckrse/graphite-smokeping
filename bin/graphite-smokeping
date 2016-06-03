@@ -23,11 +23,11 @@ loop do
 
       latency.zip metric
       latency.zip(metric).each do |value, metric|
-        dst_path = dst.gsub(".", "-")
+        dst_path = dst.gsub(".", "-").strip
         time = Time.new
         epoch = time.to_i
         sock = TCPSocket.open("#{gr_server}", 2003)
-        sock.write("#{gr_path}.#{dst_path}#{metric} #{value} #{epoch}\n")
+        sock.write("#{gr_path}.#{dst_path}.#{metric} #{value} #{epoch}\n")
         sock.close
       end
     end
